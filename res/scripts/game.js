@@ -1,6 +1,6 @@
 class FlappyBird{
 	constructor(cvs = document.getElementById("game-cvs"),
-				update_speed = 50, 
+				update_speed = 25,
 				tube_speed = 10,
 				tube_count = 3, 
 				background = {
@@ -50,21 +50,25 @@ class FlappyBird{
 		this.background["last"] = Date.now();
 		this.background["current"] = 0;
 
-        let lastTime = new Date().getTime();
+		let lastTime = new Date().getTime();
         while (this.running) {
-            await sleep(1);
-            if (lastTime + this.update_speed-Math.sqrt(this.score) < new Date().getTime()) {
-                lastTime = new Date().getTime();
-                this.update();
+			await sleep(1);
+            if (lastTime + this.update_speed*0.9 < new Date().getTime()) {
+				lastTime = new Date().getTime();
+				console.log(new Date().getTime());
+				this.update();
+				console.log(new Date().getTime());
             }
         }
 	}
 
-	//adds a new tube to the list
-	add_tube(){
-		this.tubes.push(new Tube(this.gap_height, this.cvs));
-	}
-
+	/*
+	*
+	*
+	*	Calling all the update methods
+	*
+	*
+	*/
 	update(){
 		this.paint();
         this.move();
@@ -82,6 +86,13 @@ class FlappyBird{
         this.move_player();
 	}
 
+	/*
+	*
+	*
+	*	Everything related to painting the graphics
+	*
+	*
+	*/
 	paint_background(){
 		if(Date.now() > this.background["last"] + this.background["timeout"]){
 			if(this.background["current"] < this.background["imgs"].length - 1) 
@@ -111,10 +122,17 @@ class FlappyBird{
 		}
 	}
 
+	/*
+	*
+	*
+	*	Everything related to movement, collision etc
+	*
+	*
+	*/
 	move_tubes(){
 		for(let i = 0; i < this.tubes.length; i++){
 			//move every tube
-			this.tubes[i].move(this.tube_speed);
+			this.tubes[i].move(this.tube_speed, this.update_speed);
 			//move the tubes back to the right once they are on the left
 			if(this.tubes[i].getX() <= 0 - this.tube_width){
 				this.tubes[i].setX(this.cvs.width);
@@ -141,7 +159,7 @@ class FlappyBird{
 	move_player(){
 		//move the player
 		if(this.running)
-            this.player.move();
+			this.player.move(this.update_speed);
 		//collision with game borders
 		if(this.player.getY() + 40 >= this.cvs.height || this.player.getY() <= 0 )
 			this.game_over();
@@ -176,8 +194,15 @@ class FlappyBird{
 		this.ctx.fillText("Score: " + this.score, (this.cvs.width-250)/2, 400);
 		this.ctx.fillText("Highscore: " + high_score, (this.cvs.width-350)/2, 460);		
 		this.running = false;	
-    }	
-    
+	}	
+
+	/*
+	*
+	*
+	*	Getting all the images from their path into a html element
+	*
+	*
+	*/
     add_imgs(){
 		this.add_tube_imgs();
         this.add_background_imgs();

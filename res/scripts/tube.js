@@ -9,8 +9,8 @@ class Tube{
 		this.ctx = ctx;
 	}
 	//move the tube to the left
-	move(speed) {
-		this.x -= speed;
+	move(speed, update_speed) {
+		this.x -= speed*update_speed/50;
 	}
 
 	paint() {

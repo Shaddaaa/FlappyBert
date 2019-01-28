@@ -16,9 +16,9 @@ class Player{
 		this.speed = -20;
 	}
 	//move the player, make the player fall
-	move() {
-		this.y += this.speed;
-		this.speed += 2;
+	move(update_speed) {
+		this.y += this.speed*update_speed/50;
+		this.speed += 2*update_speed/50;
 	}
 
 	paint() {
