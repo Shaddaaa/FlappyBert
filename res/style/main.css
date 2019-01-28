@@ -1,0 +1,13 @@
+*{
+	text-align: center;
+	
+}
+
+body{
+	font-family: 'Gloria Hallelujah', cursive;
+}
+
+#game-cvs{
+	border: 1px solid red;
+	
+}
