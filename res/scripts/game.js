@@ -66,8 +66,8 @@ class FlappyBird{
 	}
 
 	update(){
-        this.move();
 		this.paint();
+        this.move();
 	}
     
     paint() {
@@ -161,6 +161,7 @@ class FlappyBird{
 				hs_beaten = true;
 			}
 		}
+		this.hi = 0;
 		//paint the game over screen or high score screen, depending on if hs_beaten
 		this.ctx.font = "80px Arial";
 		this.ctx.fillStyle = "#FF0000";
@@ -173,7 +174,7 @@ class FlappyBird{
 		this.ctx.font = "60px Arial";
 		this.ctx.fillText("Press [R] to restart!", (this.cvs.width-508)/2, 270);
 		this.ctx.fillText("Score: " + this.score, (this.cvs.width-250)/2, 400);
-		this.ctx.fillText("Highscore: " + high_score, (this.cvs.width-350)/2, 460);			
+		this.ctx.fillText("Highscore: " + high_score, (this.cvs.width-350)/2, 460);		
 		this.running = false;	
     }	
     

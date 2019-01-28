@@ -16,9 +16,6 @@ class Tube{
 	paint() {
 		this.ctx.fillStyle = "#00FF00";
 		this.ctx.drawImage(this.imgs["down"], this.x, this.gap - this.imgs["down"].height);
-		console.log(this.imgs["up"]);
-		console.log(this.x);
-		console.log(this.gap + this.gap_height);
 		this.ctx.drawImage(this.imgs["up"], this.x, this.gap + this.gap_height);
 	}
 
