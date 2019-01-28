@@ -43,8 +43,9 @@ class FlappyBird{
         this.running = true;
         this.tubes = new Array(this.tube_count);
         for(let i = 0; i < this.tube_count; i++){
-            this.tubes[i] = new Tube(this.gap_height, this.cvs, this.cvs.width + this.tube_spacing * i);
-        }		this.player = new Player(40, 150, this.player_imgs);
+            this.tubes[i] = new Tube(this.gap_height, this.cvs, this.cvs.width + this.tube_spacing * i, this.tube_imgs, this.ctx);
+		}		
+		this.player = new Player(40, 150, this.player_imgs, this.ctx);
 
 		this.background["last"] = Date.now();
 		this.background["current"] = 0;
@@ -64,20 +65,60 @@ class FlappyBird{
 		this.tubes.push(new Tube(this.gap_height, this.cvs));
 	}
 
-	//updates everything related to the tubes
-	update_tubes(){
-		//green tubes
-		this.ctx.fillStyle = "#00FF00";
+	update(){
+        this.move();
+		this.paint();
+	}
+    
+    paint() {
+        this.paint_background();
+        this.paint_tubes();
+		this.paint_player();
+		this.update_score();
+    }
+
+    move() {
+        this.move_tubes();
+        this.move_player();
+	}
+
+	paint_background(){
+		if(Date.now() > this.background["last"] + this.background["timeout"]){
+			if(this.background["current"] < this.background["imgs"].length - 1) 
+				this.background["current"]++;
+			else 
+				this.background["current"] = 0;
+			this.background["last"] = Date.now();
+		}
+		this.ctx.drawImage(this.background["imgs"][this.background["current"]], 0, 0);
+	}
+
+	paint_tubes() {
+		for(let i = 0; i < this.tubes.length; i++){
+			this.tubes[i].paint();
+		}
+	}
+
+	paint_player() {
+		this.player.paint();
+	}
+
+	update_score() {
+		if (this.running) {
+			this.ctx.fillStyle = "#FF0000";
+			this.ctx.font = "30px Arial";
+			this.ctx.fillText(Math.floor(this.score), 10, this.cvs.height-10);
+		}
+	}
+
+	move_tubes(){
 		for(let i = 0; i < this.tubes.length; i++){
 			//move every tube
 			this.tubes[i].move(this.tube_speed);
-			//remove the tubes once they reached the left side, add a new tube to the right
+			//move the tubes back to the right once they are on the left
 			if(this.tubes[i].getX() <= 0 - this.tube_width){
 				this.tubes[i].setX(this.cvs.width);
 			}
-			//paint top and bottom parts of the tubes
-			this.ctx.drawImage(this.tube_imgs["down"], this.tubes[i].getX(), this.tubes[i].getGap() - this.tube_imgs["down"].height);
-			this.ctx.drawImage(this.tube_imgs["up"], this.tubes[i].getX(), this.tubes[i].getGap() + this.gap_height);
 			//collision with Flappy
        		let x_diff = this.player.getX() - this.tubes[i].getX();
         	if(x_diff > -1*this.player.getWidth() && x_diff < this.tube_width  && (this.player.getY() <= this.tubes[i].getGap() || this.player.getY() + this.player.getHeight() >= this.tubes[i].getGap() + this.gap_height)) {
@@ -97,47 +138,13 @@ class FlappyBird{
 		}
 	}
 
-	update_player(){
+	move_player(){
 		//move the player
 		if(this.running)
             this.player.move();
-
-        if (this.player.getSpeed() < 0)
-            this.ctx.drawImage(this.player.getImgs()["jump"], this.player.getX(), this.player.getY());
-        else
-            this.ctx.drawImage(this.player.getImgs()["normal"], this.player.getX(), this.player.getY());    
-
 		//collision with game borders
 		if(this.player.getY() + 40 >= this.cvs.height || this.player.getY() <= 0 )
 			this.game_over();
-	}	
-
-	update_score() {
-		this.ctx.fillStyle = "#FF0000";
-		//this.ctx.fillRect();
-		this.ctx.font = "30px Arial";
-		this.ctx.fillText(Math.floor(this.score), 10, this.cvs.height-10);
-	}
-
-	update_background(){
-		if(Date.now() > this.background["last"] + this.background["timeout"]){
-			if(this.background["current"] < this.background["imgs"].length - 1) 
-				this.background["current"]++;
-			else 
-				this.background["current"] = 0;
-			this.background["last"] = Date.now();
-		}
-		this.ctx.drawImage(this.background["imgs"][this.background["current"]], 0, 0);
-	}
-
-	update(){
-		this.update_background();
-		//update and repaint the tubes
-		this.update_tubes();
-		//update and repaint the player
-		this.update_player();
-		if(this.running)
-			this.update_score();
 	}
 
 	game_over(){

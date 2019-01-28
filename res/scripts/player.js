@@ -1,11 +1,13 @@
 class Player{
-	constructor(x, y, imgs) {
+	constructor(x, y, imgs, ctx) {
 		this.x = x;
 		this.y = y;
+		this.imgs = imgs;
+		this.ctx = ctx;
 		//negativ speed: go up, 
 		//positiv speed: go down
 		this.speed = 0;
-        this.imgs = imgs;
+
 		this.width = this.imgs["normal"].width;
 		this.height = this.imgs["normal"].height;
 	}
@@ -17,6 +19,13 @@ class Player{
 	move() {
 		this.y += this.speed;
 		this.speed += 2;
+	}
+
+	paint() {
+		if (this.speed < 0)
+            drawRotatedImage(this.imgs["jump"], this.x, this.y, this.speed, this.ctx);
+        else
+            drawRotatedImage(this.imgs["normal"], this.x, this.y, this.speed, this.ctx);    
 	}
 
     getSpeed() {return this.speed;}
