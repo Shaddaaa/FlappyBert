@@ -3,7 +3,9 @@ class Tube {
 		//position the tube on the right side of the game
 		this.x = x == -1 ? cvs.width : x;
 		//make a gap at a random height
-		this.gap = Math.floor(Math.random() * (cvs.height - gap_height));
+		this.gap_height = gap_height;
+		this.cvs = cvs;
+		this.gap = Math.floor(Math.random() * (this.cvs.height - this.gap_height));
 		this.gap_height = gap_height;
 		this.imgs = imgs;
 		this.ctx = ctx;
@@ -17,6 +19,10 @@ class Tube {
 		this.ctx.fillStyle = "#00FF00";
 		this.ctx.drawImage(this.imgs["down"], this.x, this.gap - this.imgs["down"].height);
 		this.ctx.drawImage(this.imgs["up"], this.x, this.gap + this.gap_height);
+	}
+
+	randomizeGap() {
+		this.gap = Math.floor(Math.random() * (this.cvs.height - this.gap_height));
 	}
 
 	setX(x) { this.x = x }

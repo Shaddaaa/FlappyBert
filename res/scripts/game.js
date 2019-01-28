@@ -134,6 +134,7 @@ class FlappyBird {
 			this.tubes[i].move(this.tube_speed, this.update_speed);
 			//move the tubes back to the right once they are on the left
 			if (this.tubes[i].getX() <= 0 - this.tube_width) {
+				this.tubes[i].randomizeGap();
 				this.tubes[i].setX(this.cvs.width);
 			}
 			//collision with Flappy
@@ -160,7 +161,7 @@ class FlappyBird {
 		if (this.running)
 			this.player.move(this.update_speed);
 		//collision with game borders
-		if (this.player.getY() + this.player.getHeight() >= this.cvs.height || this.player.getY() <= 0)
+		if (this.player.getY() + this.player.getHeight() - 12 >= this.cvs.height || this.player.getY() <= 0)
 			this.game_over();
 	}
 
