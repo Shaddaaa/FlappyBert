@@ -160,7 +160,7 @@ class FlappyBird {
 		if (this.running)
 			this.player.move(this.update_speed);
 		//collision with game borders
-		if (this.player.getY() + 40 >= this.cvs.height || this.player.getY() <= 0)
+		if (this.player.getY() + this.player.getHeight() >= this.cvs.height || this.player.getY() <= 0)
 			this.game_over();
 	}
 
