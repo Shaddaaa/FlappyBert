@@ -53,12 +53,10 @@ class FlappyBird{
 		let lastTime = new Date().getTime();
         while (this.running) {
 			await sleep(1);
-            if (lastTime + this.update_speed*0.9 < new Date().getTime()) {
+            if (lastTime + this.update_speed - Math.sqrt(this.score*4) < new Date().getTime()) {
 				lastTime = new Date().getTime();
-				console.log(new Date().getTime());
 				this.update();
-				console.log(new Date().getTime());
-            }
+			}
         }
 	}
 
