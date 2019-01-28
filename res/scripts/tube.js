@@ -10,6 +10,8 @@ class Tube{
 		this.x -= speed;
 	}
 
+	setX(x){this.x = x}
+
 	getX(){return this.x;}
 
 	getGap(){return this.gap;}
